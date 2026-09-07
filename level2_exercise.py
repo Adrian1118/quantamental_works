@@ -120,6 +120,8 @@ def fetch_and_store_fundamentals(conn, tickers, period="1y"):
         financials.index.name = "period_end_date"
         financials = financials.reset_index()
 
+        fiscal_year_end_date = t.financials.columns[0] if not t.financials.empty else None
+
         balance_sheet = t.quarterly_balance_sheet.T
         balance_sheet.index.name = "period_end_date"
         balance_sheet = balance_sheet.reset_index()
@@ -145,24 +147,35 @@ def fetch_and_store_fundamentals(conn, tickers, period="1y"):
 
         merged["Ticker"] = ticker
 
-        fiscal_year_end_date = t.financials.columns[0] if not t.financials.empty else None
+        COLUMN_MAP = {
+            "Total Revenue": "revenue",
+            "Gross Profit": "gross_profit",
+            "EBITDA": "ebitda",
+            "EBIT": "ebit",
+            "Net Income": "net_income",
+            "Common Stock Equity": "total_equity",
+            "Total Assets": "total_assets",
+            "Total Liabilities Net Minority Interest": "total_liabilities",
+            "Ordinary Shares Number": "shares_outstanding",
+        }
+
+        merged = merged.rename(columns=COLUMN_MAP)
+
+        financial_cols = list(COLUMN_MAP.values())  # now schema names, consistent everywhere
+        existing_cols = [c for c in financial_cols if c in merged.columns]
+        merged_clean = merged.dropna(subset=existing_cols, how="all")
+
         rows = [
-            (ticker, row["period_end_date"].strftime("%Y-%m-%d"), 
-             row["report_date"].strftime("%Y-%m-%d"), 
-             row["is_estimated_report_date"],
-             infer_fiscal_period(row["period_end_date"], fiscal_year_end_date),
-             row.get("Total Revenue", None), 
-             row.get("Gross Profit", None),
-             row.get("EBITDA", None), 
-             row.get("EBIT", None),
-             row.get("Net Income", None), 
-             row.get("Common Stock Equity"),
-             row.get("Total Assets", None),
-             row.get("Total Liabilities Net Minority Interest", None), 
-             row.get("Ordinary Shares Number")
-             )
-             for _, row in merged.iterrows()
-             ]
+            (ticker, row["period_end_date"].strftime("%Y-%m-%d"),
+            row["report_date"].strftime("%Y-%m-%d"), row["is_estimated_report_date"],
+            infer_fiscal_period(row["period_end_date"], fiscal_year_end_date),
+            row.get("revenue", None), row.get("gross_profit", None),
+            row.get("ebitda", None), row.get("ebit", None),
+            row.get("net_income", None), row.get("total_equity", None),
+            row.get("total_assets", None), row.get("total_liabilities", None),
+            row.get("shares_outstanding", None))
+            for _, row in merged_clean.iterrows()
+        ]
 
         all_rows.extend(rows)
 

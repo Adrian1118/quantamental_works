@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+qw_data.db
+*.pub
+quantamental_works_key*

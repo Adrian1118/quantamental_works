@@ -113,71 +113,81 @@ def infer_fiscal_period(period_end_date, fiscal_year_end_date=None):
 def fetch_and_store_fundamentals(conn, tickers, period="1y"):
 
     all_rows = []
+    failed_tickers = []
 
     for ticker in tickers:
-        t = yf.Ticker(ticker)
-        financials = t.quarterly_financials.T
-        financials.index.name = "period_end_date"
-        financials = financials.reset_index()
+        try:
+            t = yf.Ticker(ticker)
+            financials = t.quarterly_financials.T
+            financials.index.name = "period_end_date"
+            financials = financials.reset_index()
 
-        fiscal_year_end_date = t.financials.columns[0] if not t.financials.empty else None
+            fiscal_year_end_date = t.financials.columns[0] if not t.financials.empty else None
 
-        balance_sheet = t.quarterly_balance_sheet.T
-        balance_sheet.index.name = "period_end_date"
-        balance_sheet = balance_sheet.reset_index()
+            balance_sheet = t.quarterly_balance_sheet.T
+            balance_sheet.index.name = "period_end_date"
+            balance_sheet = balance_sheet.reset_index()
 
-        financials_and_bs = pd.merge(financials, balance_sheet, on="period_end_date", how="outer")
+            financials_and_bs = pd.merge(financials, balance_sheet, on="period_end_date", how="outer")
 
-        earnings_dates = t.earnings_dates.reset_index()
-        earnings_dates["Earnings Date"] = earnings_dates["Earnings Date"].dt.tz_localize(None)
-        
-        merged = pd.merge_asof(
-            financials_and_bs.sort_values("period_end_date"),
-            earnings_dates.sort_values("Earnings Date"),
-            left_on="period_end_date",
-            right_on="Earnings Date",
-            direction="forward",
-            tolerance=pd.Timedelta("120 days")
-        )
+            raw_earnings_dates = t.earnings_dates
+            if raw_earnings_dates is not None and not raw_earnings_dates.empty:
+                earnings_dates = raw_earnings_dates.reset_index()
+                earnings_dates["Earnings Date"] = earnings_dates["Earnings Date"].dt.tz_localize(None)
+            else:
+                earnings_dates = pd.DataFrame({"Earnings Date": pd.to_datetime([])})
+            
+            merged = pd.merge_asof(
+                financials_and_bs.sort_values("period_end_date"),
+                earnings_dates.sort_values("Earnings Date"),
+                left_on="period_end_date",
+                right_on="Earnings Date",
+                direction="forward",
+                tolerance=pd.Timedelta("120 days")
+            )
 
-        merged["report_date"] = merged["Earnings Date"].fillna(
-            merged["period_end_date"]+pd.Timedelta(days=45)
-        )
-        merged["is_estimated_report_date"] = merged["Earnings Date"].isna()
+            merged["report_date"] = merged["Earnings Date"].fillna(
+                merged["period_end_date"]+pd.Timedelta(days=45)
+            )
+            merged["is_estimated_report_date"] = merged["Earnings Date"].isna()
 
-        merged["Ticker"] = ticker
+            merged["Ticker"] = ticker
 
-        COLUMN_MAP = {
-            "Total Revenue": "revenue",
-            "Gross Profit": "gross_profit",
-            "EBITDA": "ebitda",
-            "EBIT": "ebit",
-            "Net Income": "net_income",
-            "Common Stock Equity": "total_equity",
-            "Total Assets": "total_assets",
-            "Total Liabilities Net Minority Interest": "total_liabilities",
-            "Ordinary Shares Number": "shares_outstanding",
-        }
+            COLUMN_MAP = {
+                "Total Revenue": "revenue",
+                "Gross Profit": "gross_profit",
+                "EBITDA": "ebitda",
+                "EBIT": "ebit",
+                "Net Income": "net_income",
+                "Common Stock Equity": "total_equity",
+                "Total Assets": "total_assets",
+                "Total Liabilities Net Minority Interest": "total_liabilities",
+                "Ordinary Shares Number": "shares_outstanding",
+            }
 
-        merged = merged.rename(columns=COLUMN_MAP)
+            merged = merged.rename(columns=COLUMN_MAP)
 
-        financial_cols = list(COLUMN_MAP.values())  # now schema names, consistent everywhere
-        existing_cols = [c for c in financial_cols if c in merged.columns]
-        merged_clean = merged.dropna(subset=existing_cols, how="all")
+            financial_cols = list(COLUMN_MAP.values())  # now schema names, consistent everywhere
+            existing_cols = [c for c in financial_cols if c in merged.columns]
+            merged_clean = merged.dropna(subset=existing_cols, how="all")
 
-        rows = [
-            (ticker, row["period_end_date"].strftime("%Y-%m-%d"),
-            row["report_date"].strftime("%Y-%m-%d"), row["is_estimated_report_date"],
-            infer_fiscal_period(row["period_end_date"], fiscal_year_end_date),
-            row.get("revenue", None), row.get("gross_profit", None),
-            row.get("ebitda", None), row.get("ebit", None),
-            row.get("net_income", None), row.get("total_equity", None),
-            row.get("total_assets", None), row.get("total_liabilities", None),
-            row.get("shares_outstanding", None))
-            for _, row in merged_clean.iterrows()
-        ]
+            rows = [
+                (ticker, row["period_end_date"].strftime("%Y-%m-%d"),
+                row["report_date"].strftime("%Y-%m-%d"), row["is_estimated_report_date"],
+                infer_fiscal_period(row["period_end_date"], fiscal_year_end_date),
+                row.get("revenue", None), row.get("gross_profit", None),
+                row.get("ebitda", None), row.get("ebit", None),
+                row.get("net_income", None), row.get("total_equity", None),
+                row.get("total_assets", None), row.get("total_liabilities", None),
+                row.get("shares_outstanding", None))
+                for _, row in merged_clean.iterrows()
+            ]
 
-        all_rows.extend(rows)
+            all_rows.extend(rows)
+        except Exception as e:
+            print(f"failed to fetch fundamentals for {ticker}: {e}")
+            failed_tickers.append(ticker)
+            continue
 
     conn.executemany("""
     INSERT OR REPLACE INTO Fundamentals
@@ -186,6 +196,11 @@ def fetch_and_store_fundamentals(conn, tickers, period="1y"):
     """, all_rows)
 
     conn.commit()
+
+    if failed_tickers:
+        print(f"\n{len(failed_tickers)} ticker(s) failed: {failed_tickers}")
+
+    return failed_tickers
 
 if __name__ == "__main__":
     tickers = ["AAPL", "NVDA", "ZTS", "A", "BRK-B"]

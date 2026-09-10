@@ -84,6 +84,7 @@ pycparser==3.0
 Pygments==2.21.0
 pyparsing==3.3.2
 python-dateutil==2.9.0.post0
+python-dotenv==1.2.3
 python-json-logger==4.2.0
 pytz==2026.3.post1
 PyYAML==6.0.3
@@ -95,6 +96,7 @@ rfc3986-validator==0.1.1
 rfc3987-syntax==1.1.0
 rpds-py==0.30.0
 Send2Trash==2.1.0
+simfin==1.0.2
 six==1.17.0
 soupsieve==2.9.2
 stack-data==0.6.3

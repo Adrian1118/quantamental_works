@@ -220,3 +220,4 @@ qw_data.db
 *.pub
 quantamental_works_key*
 .env
+.env

@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import sqlite3
+from tqdm import tqdm
 import simfin as sf
 from dotenv import load_dotenv
 from utils import refresh_sp500_constituents_file
@@ -167,7 +168,7 @@ def fetch_and_store_fundamentals(conn, tickers):
 
     all_rows = []
     failed_tickers = []
-    for ticker in tickers:
+    for ticker in tqdm(tickers, desc="Fetching fundamentals"):
         try:
             ticker_rows = merged[merged["Ticker"] == ticker]
             rows = [
@@ -202,8 +203,8 @@ if __name__ == "__main__":
     industries = sf.load_industries().reset_index()
 
     sp500 = pd.merge(companies, industries, how="left", on="IndustryId")
-    chosen_sectors = ["Technology", "Real Estate", "Consumer Defensive"]
-    universe = sp500[sp500["Sector"].isin(chosen_sectors)]
+    chosen_sectors = []
+    universe = sp500[sp500["Sector"].isin(chosen_sectors)] if len(chosen_sectors)>0 else sp500
     tickers = universe["Ticker"].tolist()
 
     conn = get_connection()
@@ -214,3 +215,6 @@ if __name__ == "__main__":
     fetch_and_store_prices(conn, tickers)
     failed = fetch_and_store_fundamentals(conn, tickers)
     conn.close()
+    end_message = f'{len(failed)} tickers failed out of {len(tickers)}'
+    end_message += f'\nFailed tickers: {failed}' if len(failed)>0 else ''
+    print(end_message)

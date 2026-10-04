@@ -66,6 +66,7 @@ BIIB,Biogen,Health Care,Biotechnology
 BLK,BlackRock,Financials,Asset Management & Custody Banks
 BX,Blackstone Inc.,Financials,Asset Management & Custody Banks
 XYZ,"Block, Inc.",Financials,Transaction & Payment Processing Services
+BE,Bloom Energy,Industrials,Electrical Components & Equipment
 BNY,BNY Mellon,Financials,Asset Management & Custody Banks
 BA,Boeing,Industrials,Aerospace & Defense
 BKNG,Booking Holdings,Consumer Discretionary,"Hotels, Resorts & Cruise Lines"
@@ -75,7 +76,6 @@ AVGO,Broadcom,Information Technology,Semiconductors
 BR,Broadridge Financial Solutions,Industrials,Data Processing & Outsourced Services
 BRO,Brown & Brown,Financials,Insurance Brokers
 BF.B,Brown–Forman,Consumer Staples,Distillers & Vintners
-BLDR,Builders FirstSource,Industrials,Building Products
 BG,Bunge Global,Consumer Staples,Agricultural Products & Services
 BXP,"BXP, Inc.",Real Estate,Office REITs
 CHRW,C.H. Robinson,Industrials,Air Freight & Logistics
@@ -178,6 +178,7 @@ ESS,Essex Property Trust,Real Estate,Multi-Family Residential REITs
 EL,Estée Lauder Companies (The),Consumer Staples,Personal Care Products
 EG,Everest Group,Financials,Reinsurance
 EVRG,Evergy,Utilities,Electric Utilities
+P,Everpure,Information Technology,"Technology Hardware, Storage & Peripherals"
 ES,Eversource Energy,Utilities,Electric Utilities
 EXC,Exelon,Utilities,Electric Utilities
 EXE,Expand Energy,Energy,Oil & Gas Exploration & Production
@@ -246,6 +247,7 @@ IBM,IBM,Information Technology,IT Consulting & Other Services
 IEX,IDEX Corporation,Industrials,Industrial Machinery & Supplies & Components
 IDXX,Idexx Laboratories,Health Care,Health Care Equipment
 ITW,Illinois Tool Works,Industrials,Industrial Machinery & Supplies & Components
+ILMN,"Illumina, Inc.",Health Care,Life Sciences Tools & Services
 INCY,Incyte,Health Care,Biotechnology
 IR,Ingersoll Rand,Industrials,Industrial Machinery & Supplies & Components
 PODD,Insulet Corporation,Health Care,Health Care Equipment
@@ -316,7 +318,6 @@ MU,Micron Technology,Information Technology,Semiconductors
 MSFT,Microsoft,Information Technology,Systems Software
 MAA,Mid-America Apartment Communities,Real Estate,Multi-Family Residential REITs
 MRNA,Moderna,Health Care,Biotechnology
-TAP,Molson Coors Beverage Company,Consumer Staples,Brewers
 MDLZ,Mondelez International,Consumer Staples,Packaged Foods & Meats
 MPWR,Monolithic Power Systems,Information Technology,Semiconductors
 MNST,Monster Beverage,Consumer Staples,Soft Drinks & Non-alcoholic Beverages
@@ -443,7 +444,6 @@ TXT,Textron,Industrials,Aerospace & Defense
 TMO,Thermo Fisher Scientific,Health Care,Life Sciences Tools & Services
 TJX,TJX Companies,Consumer Discretionary,Apparel Retail
 TKO,TKO Group Holdings,Communication Services,Movies & Entertainment
-TTD,Trade Desk (The),Communication Services,Advertising
 TSCO,Tractor Supply,Consumer Discretionary,Other Specialty Retail
 TT,Trane Technologies,Industrials,Building Products
 TDG,TransDigm Group,Industrials,Aerospace & Defense

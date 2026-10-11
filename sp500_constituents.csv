@@ -127,7 +127,6 @@ COO,Cooper Companies (The),Health Care,Health Care Supplies
 CPRT,Copart,Industrials,Diversified Support Services
 GLW,Corning Inc.,Information Technology,Electronic Components
 CPAY,Corpay,Financials,Transaction & Payment Processing Services
-CTVA,Corteva,Materials,Fertilizers & Agricultural Chemicals
 CSGP,CoStar Group,Real Estate,Real Estate Services
 COST,Costco,Consumer Staples,Consumer Staples Merchandise Retail
 CRH,CRH plc,Materials,Construction Materials
@@ -357,7 +356,6 @@ PCAR,Paccar,Industrials,Construction Machinery & Heavy Transportation Equipment
 PKG,Packaging Corporation of America,Materials,Paper & Plastic Packaging Products & Materials
 PLTR,Palantir Technologies,Information Technology,Application Software
 PANW,Palo Alto Networks,Information Technology,Systems Software
-PSKY,Paramount Skydance Corporation,Communication Services,Movies & Entertainment
 PH,Parker Hannifin,Industrials,Industrial Machinery & Supplies & Components
 PAYX,Paychex,Industrials,Human Resource & Employment Services
 PYPL,PayPal,Financials,Transaction & Payment Processing Services
@@ -411,6 +409,7 @@ SRE,Sempra,Utilities,Multi-Utilities
 NOW,ServiceNow,Information Technology,Systems Software
 SHW,Sherwin-Williams,Materials,Specialty Chemicals
 SPG,Simon Property Group,Real Estate,Retail REITs
+SKYD,Skydance Corporation,Communication Services,Movies & Entertainment
 SWKS,Skyworks Solutions,Information Technology,Semiconductors
 SJM,J.M. Smucker Company (The),Consumer Staples,Packaged Foods & Meats
 SW,Smurfit Westrock,Materials,Paper & Plastic Packaging Products & Materials
@@ -450,6 +449,7 @@ TDG,TransDigm Group,Industrials,Aerospace & Defense
 TRV,Travelers Companies (The),Financials,Property & Casualty Insurance
 TRMB,Trimble Inc.,Information Technology,Application Software
 TFC,Truist Financial,Financials,Diversified Banks
+TWLO,Twilio,Information Technology,Systems Software
 TYL,Tyler Technologies,Information Technology,Application Software
 TSN,Tyson Foods,Consumer Staples,Packaged Foods & Meats
 USB,U.S. Bancorp,Financials,Diversified Banks
@@ -477,12 +477,12 @@ V,Visa Inc.,Financials,Transaction & Payment Processing Services
 VST,Vistra Corp.,Utilities,Electric Utilities
 VMRK,Vivmark Residential,Real Estate,Multi-Family Residential REITs
 VMC,Vulcan Materials Company,Materials,Construction Materials
+VYLR,Vylor,Consumer Staples,Agricultural Products & Services
 WRB,W. R. Berkley Corporation,Financials,Property & Casualty Insurance
 GWW,W. W. Grainger,Industrials,Industrial Machinery & Supplies & Components
 WAB,Wabtec,Industrials,Construction Machinery & Heavy Transportation Equipment
 WMT,Walmart,Consumer Staples,Consumer Staples Merchandise Retail
 DIS,Walt Disney Company (The),Communication Services,Movies & Entertainment
-WBD,Warner Bros. Discovery,Communication Services,Broadcasting
 WM,Waste Management,Industrials,Environmental & Facilities Services
 WAT,Waters Corporation,Health Care,Life Sciences Tools & Services
 WEC,WEC Energy Group,Utilities,Electric Utilities
